@@ -1,1 +1,1359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Barbearia Wilkei LC — Agendamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0d11;
+  --card: #181820;
+  --card-border: #2a2a36;
+  --ink: #f0f0f5;
+  --mute: #8e8e9f;
+  --accent: #ffd700;
+  --accent-ink: #000000;
+  --neon-green: #25d366;
+  --neon-blue: #0088cc;
+  --danger: #ff4757;
+  --font-main: 'Montserrat', system-ui, -apple-system, sans-serif;
+}
 
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-main);
+  font-size: 15px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-image: radial-gradient(circle at 50% 0%, #1f1d2b 0%, var(--bg) 70%);
+}
+
+header {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--card-border);
+  background: rgba(24, 24, 32, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand-icon {
+  font-size: 24px;
+}
+
+header b {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(45deg, #fff, var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header div.sub {
+  color: var(--mute);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+#log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  max-width: 640px;
+  width: 100%;
+  margin: 0 auto;
+  scroll-behavior: smooth;
+}
+
+.m {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  margin: 0 0 12px;
+  white-space: pre-line;
+  font-size: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.bot {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-bottom-left-radius: 4px;
+  color: var(--ink);
+}
+
+.me {
+  background: linear-gradient(135deg, var(--accent), #ffaa00);
+  color: var(--accent-ink);
+  margin-left: auto;
+  border-bottom-right-radius: 4px;
+  font-weight: 600;
+}
+
+#dock {
+  border-top: 1px solid var(--card-border);
+  background: rgba(24, 24, 32, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 16px;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+#dock > div {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+button, input, select {
+  font-family: var(--font-main);
+}
+
+.chip {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 12px 18px;
+  cursor: pointer;
+  touch-action: manipulation;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.chip:not(:disabled):active {
+  transform: scale(0.96);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chip:disabled {
+  opacity: 0.3;
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.btn-back {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--mute);
+  border: 1px dashed var(--card-border);
+  border-radius: 12px;
+  padding: 12px;
+  width: 100%;
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-back:active {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--ink);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+input, select {
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  max-width: 100%;
+  color-scheme: dark;
+  -webkit-appearance: none;
+}
+
+input:focus, select:focus {
+  border-color: var(--accent);
+}
+
+.send {
+  background: linear-gradient(135deg, var(--accent), #ffaa00);
+  color: #000;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2);
+  width: 100%;
+}
+
+a.wa, a.cal, button.cal, button.del-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+  padding: 14px;
+  border-radius: 12px;
+  margin-top: 10px;
+  width: 100%;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+a.wa:active, a.cal:active, button.cal:active, button.del-btn:active {
+  transform: scale(0.98);
+}
+
+a.wa {
+  background: var(--neon-green);
+  color: #000;
+}
+
+a.cal, button.cal {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--card-border);
+}
+
+a.cal-google {
+  background: var(--neon-blue);
+  color: #fff;
+}
+
+button.del-btn {
+  background: rgba(255, 71, 87, 0.15);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.err {
+  color: var(--danger);
+  font-size: 13px;
+  margin: 0;
+}
+
+.admin-btn {
+  background: none;
+  border: none;
+  color: var(--mute);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 10px;
+}
+
+.admin-tab {
+  flex: 1;
+  background: var(--card);
+  color: var(--mute);
+  border: 1px solid var(--card-border);
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.admin-tab.active {
+  background: var(--accent);
+  color: #000;
+  border-color: var(--accent);
+}
+
+.admin-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.admin-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 10px;
+}
+
+.admin-card-time {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.admin-card-badge {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-transform: uppercase;
+}
+
+.admin-card-body {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+.admin-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+
+.btn-admin-act {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
+.btn-act-wa {
+  background: var(--neon-green);
+  color: #000;
+}
+
+.btn-act-edit {
+  background: var(--card-border);
+  color: var(--ink);
+  border: 1px solid var(--card-border);
+}
+
+.btn-act-del {
+  background: rgba(255, 71, 87, 0.15);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.date-group-header {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin: 18px 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-group-header::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--card-border);
+}
+
+#modal-admin, #modal-edit {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(5px);
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-content {
+  background: var(--card);
+  padding: 24px;
+  border-radius: 16px;
+  max-width: 320px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border: 1px solid var(--card-border);
+}
+</style>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <span class="brand-icon">💈</span>
+    <div>
+      <b>Barbearia Wilkei LC</b>
+      <div class="sub">Agendamento Online</div>
+    </div>
+  </div>
+  <button class="admin-btn" onclick="showAdminModal()">Admin</button>
+</header>
+
+<div id="log" aria-live="polite"></div>
+<div id="dock"><div id="ctl"></div></div>
+
+<!-- Modal Admin Pass -->
+<div id="modal-admin">
+  <div class="modal-content">
+    <b style="font-size:18px; text-transform:uppercase;">Acesso do Barbeiro</b>
+    <input type="password" id="admin-pass-input" placeholder="Digite a senha">
+    <p class="err" id="admin-err"></p>
+    <button class="send" onclick="checkAdminPass()">Entrar</button>
+    <button class="admin-btn" onclick="closeAdminModal()">Cancelar</button>
+  </div>
+</div>
+
+<!-- Modal Editar Agendamento -->
+<div id="modal-edit">
+  <div class="modal-content">
+    <b style="font-size:16px; text-transform:uppercase; color:var(--accent);">✏️ Editar Agendamento</b>
+    <p id="edit-info" style="font-size:13px; color:var(--mute); margin:0;"></p>
+    
+    <label style="font-size:12px; font-weight:600;">Nova Data:</label>
+    <input type="date" id="edit-new-date">
+
+    <label style="font-size:12px; font-weight:600;">Novo Horário de Início:</label>
+    <select id="edit-new-time"></select>
+
+    <label style="font-size:12px; font-weight:600;">Tempo de Atendimento:</label>
+    <select id="edit-new-duration">
+      <option value="15">15 min (Pezinho)</option>
+      <option value="20">20 min (Criança Rápida)</option>
+      <option value="30">30 min (Barba)</option>
+      <option value="40">40 min (Corte Masculino / Sobrancelha)</option>
+      <option value="45">45 min (+15 min extra)</option>
+      <option value="50">50 min (+20 min extra)</option>
+      <option value="60">60 min (Corte e Barba / 1h)</option>
+      <option value="75">75 min (+45 min extra)</option>
+      <option value="90">90 min (1h30)</option>
+    </select>
+
+    <button class="send" onclick="confirmMoveBooking()">💾 Salvar Alterações</button>
+    <button class="admin-btn" onclick="closeEditModal()">Cancelar</button>
+  </div>
+</div>
+
+<script>
+var db = null;
+try {
+  const firebaseConfig = {
+    databaseURL: "https://barbearia-63f58-default-rtdb.firebaseio.com/"
+  };
+  firebase.initializeApp(firebaseConfig);
+  db = firebase.database();
+} catch(e) {
+  console.log("Firebase offline");
+}
+
+var SALON = "5511989448738";
+var PIX_KEY = "11989448738"; // Chave PIX (Celular / CPF / CNPJ)
+var ADMIN_PASS = "123456";
+var currentEditData = null;
+var activeAdminTab = "list";
+
+// [Serviço, Preço, Duração Padrão em Minutos]
+var SV = [
+  ["Corte masculino", 40, 40], 
+  ["Corte com sobrancelha", 45, 40], 
+  ["Barba", 30, 30], 
+  ["Corte e barba", 65, 60], 
+  ["Pezinho", 15, 15]
+];
+var DOW = ["dom","seg","ter","qua","qui","sex","sáb"], MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+var S = {}; 
+var log = document.getElementById("log"), ctl = document.getElementById("ctl");
+
+function getServiceDuration(sName) {
+  if(!sName) return 40;
+  for (var i = 0; i < SV.length; i++) {
+    if (SV[i][0] === sName) return SV[i][2];
+  }
+  return 40;
+}
+
+function parseMins(tStr){
+  if(!tStr) return 0;
+  if(typeof tStr === 'number') return tStr;
+  if(tStr.length === 4 && tStr.indexOf(":") === -1){
+    tStr = tStr.substring(0,2) + ":" + tStr.substring(2,4);
+  }
+  var p = tStr.split(":");
+  return (parseInt(p[0], 10) || 0) * 60 + (parseInt(p[1], 10) || 0);
+}
+
+function say(t,who){
+  var d=document.createElement("div");d.className="m "+(who||"bot");d.textContent=t;log.appendChild(d);
+  log.scrollTo({top:log.scrollHeight,behavior:'smooth'});
+}
+
+function iso(d){
+  if (!(d instanceof Date) || isNaN(d)) d = new Date();
+  var y = d.getFullYear();
+  var m = String(d.getMonth() + 1).padStart(2, "0");
+  var day = String(d.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + day;
+}
+
+function lbl(d){
+  if (!(d instanceof Date) || isNaN(d)) return "Data selecionada";
+  return DOW[d.getDay()] + ", " + d.getDate() + " " + MES[d.getMonth()];
+}
+
+function chips(items,cb,showBackType){
+  ctl.innerHTML="";
+  var w=document.createElement("div");w.className="chips";
+  items.forEach(function(it){
+    var b=document.createElement("button");b.className="chip";b.textContent=it.t;b.disabled=!!it.off;
+    b.onclick=function(e){
+      e.preventDefault();
+      var all = w.querySelectorAll('.chip');
+      all.forEach(function(btn){ btn.disabled = true; });
+      say(it.rawTime || it.t,"me");
+      cb(it);
+    };
+    w.appendChild(b);
+  });
+  ctl.appendChild(w);
+
+  if(showBackType === "day") {
+    var btnBack = document.createElement("button");
+    btnBack.className = "btn-back";
+    btnBack.textContent = "↩️ Escolher outro serviço";
+    btnBack.onclick = function() { selectService(); };
+    ctl.appendChild(btnBack);
+  } else if(showBackType === "time") {
+    var btnBack = document.createElement("button");
+    btnBack.className = "btn-back";
+    btnBack.textContent = "↩️ Escolher outro dia";
+    btnBack.onclick = function() { pickDay(); };
+    ctl.appendChild(btnBack);
+  }
+}
+
+function askMulti(fields,cb){
+  ctl.innerHTML="";var f=document.createElement("form"),e=document.createElement("p");e.className="err";
+  var inputs={};
+  fields.forEach(function(fld){
+    var i=document.createElement("input");i.placeholder=fld.ph;i.type=fld.type||"text";
+    inputs[fld.key]=i;f.appendChild(i);
+  });
+  var b=document.createElement("button");b.className="send";b.textContent="Continuar";
+  f.appendChild(b);f.appendChild(e);ctl.appendChild(f);
+  f.onsubmit=function(ev){
+    ev.preventDefault();
+    for(var k in inputs){if(!inputs[k].value.trim()){e.textContent="Preencha todos os campos.";return}}
+    b.disabled = true;
+    cb(inputs);
+  }
+}
+
+function start(){
+  S={};
+  log.innerHTML = "";
+  say("Salve! Seja bem-vindo à Barbearia Wilkei LC! 💈\nComo posso te ajudar hoje?");
+  chips([
+    {t:"✂️ Mandar aquele corte (Agendar)", act:"new"},
+    {t:"❌ Cancelar meu agendamento", act:"cancel"}
+  ], function(it){
+    if(it.act === "new") selectService();
+    else cancelByClient();
+  });
+}
+
+function selectService(){
+  say("Qual o serviço de hoje?");
+  chips(SV.map(function(s,i){return{t:s[0]+" ("+s[2]+" min) · R$ "+s[1],i:i}}),function(it){S.svc=SV[it.i];pickDay()});
+}
+
+function pickDay(){
+  say("Fechou! "+S.svc[0]+". Qual dia fica melhor pra você?");
+  var days=[], base = new Date();
+  base.setHours(0,0,0,0);
+
+  for(var k=0; k<45 && days.length<30; k++){
+    var d = new Date(base.getTime() + k*86400000);
+    if(d.getDay() !== 0 && d.getDay() !== 1) days.push(d);
+  }
+  chips(days.map(function(d){return{t:lbl(d),d:d}}),function(it){
+    S.date = new Date(it.d.getTime());
+    pickTime();
+  }, "day");
+}
+
+function pickTime(){
+  try {
+    var d = S.date || new Date();
+    var dateKey = iso(d);
+    
+    ctl.innerHTML = "<p style='color:var(--mute); font-size:14px;'>🔍 Consultando horários livres...</p>";
+
+    var fetchBookings = db ? db.ref('agendamentos/' + dateKey).once('value') : Promise.resolve({ val: function(){ return null; } });
+
+    fetchBookings.then(function(snapshot){
+      var booked = snapshot.val() || {};
+      var dayNum = d.getDay();
+      var startMin = 9 * 60;
+      var endMin = 19 * 60 + 30;
+
+      if (dayNum === 2 || dayNum === 3) {
+        startMin = 10 * 60;
+        endMin = 19 * 60 + 30;
+      } else if (dayNum === 4 || dayNum === 5) {
+        startMin = 9 * 60;
+        endMin = 19 * 60 + 30;
+      } else if (dayNum === 6) {
+        startMin = 8 * 60 + 30;
+        endMin = 16 * 60 + 30;
+      }
+
+      var now = new Date(); 
+      var items = [];
+      var duration = S.svc ? S.svc[2] : 40;
+
+      for(var m = startMin; m <= endMin; m += 30){
+        var t = String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0");
+        var past = (iso(now) === dateKey) && (m <= (now.getHours()*60 + now.getMinutes()));
+
+        var isBooked = false;
+        for(var k in booked){
+          var bItem = booked[k];
+          if(!bItem) continue;
+          var bStart = parseMins(bItem.hora || k);
+          var bDur = bItem.duracao || getServiceDuration(bItem.servico);
+          var bEnd = bStart + bDur;
+
+          if(Math.max(m, bStart) < Math.min(m + duration, bEnd)){
+            isBooked = true;
+            break;
+          }
+        }
+
+        items.push({
+          t: isBooked ? t + " (Ocupado)" : t,
+          rawTime: t,
+          off: past || isBooked
+        });
+      }
+
+      say("Escolha o melhor horário para " + lbl(d) + ":");
+      chips(items, function(it){
+        S.time = it.rawTime;
+        getUserData();
+      }, "time");
+    }).catch(function(err){
+      say("Erro ao consultar horários no banco. Tente recarregar.");
+    });
+
+  } catch(err) {
+    say("Erro ao carregar horários. Tente recarregar a página.");
+  }
+}
+
+function getUserData(){
+  say("Para finalizar, me manda seu Nome e WhatsApp:");
+  askMulti([
+    {key:"nome", ph:"Seu nome completo"},
+    {key:"tel", ph:"Seu WhatsApp (ex: 11999999999)", type:"tel"}
+  ], function(inputs){
+    S.nome = inputs.nome.value.trim();
+    S.tel = inputs.tel.value.replace(/\D/g,"");
+    say(S.nome + " | " + S.tel, "me");
+    selectPaymentMethod();
+  });
+}
+
+function selectPaymentMethod(){
+  say("Como você deseja realizar o pagamento?");
+  chips([
+    {t:"💵 Pagar na Barbearia (Dinheiro/Cartão/PIX)", act:"local"},
+    {t:"📲 Adiantar via PIX (Chave da Barbearia)", act:"pix"}
+  ], function(it){
+    if(it.act === "local"){
+      S.pagamento = "LOCAL";
+      S.pago = false;
+      confirm2();
+    } else {
+      S.pagamento = "PIX";
+      S.pago = false;
+      showPixInstructions();
+    }
+  });
+}
+
+function showPixInstructions(){
+  say("Chave PIX da Barbearia (Celular):\n" + PIX_KEY + "\n\nValor: R$ " + S.svc[1] + ",00");
+  ctl.innerHTML = "";
+  
+  var btnCopy = document.createElement("button");
+  btnCopy.className = "send";
+  btnCopy.style.marginBottom = "10px";
+  btnCopy.textContent = "📋 Copiar Chave PIX";
+  btnCopy.onclick = function(){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(PIX_KEY);
+    } else {
+      var inp = document.createElement("input");
+      inp.value = PIX_KEY;
+      document.body.appendChild(inp);
+      inp.select();
+      document.execCommand("copy");
+      document.body.removeChild(inp);
+    }
+    alert("Chave PIX copiada!");
+  };
+  ctl.appendChild(btnCopy);
+
+  var btnDone = document.createElement("button");
+  btnDone.className = "send";
+  btnDone.style.background = "var(--neon-green)";
+  btnDone.style.color = "#000";
+  btnDone.textContent = "✅ Já fiz o PIX / Confirmar";
+  btnDone.onclick = function(){
+    confirm2();
+  };
+  ctl.appendChild(btnDone);
+}
+
+function confirm2(){
+  var txtPag = S.pagamento === "PIX" ? "📲 PIX (Aguardando conferência)" : "💵 Na Barbearia (Dinheiro/Cartão/PIX)";
+  say("Dá uma conferida se tá tudo certo:\n\n• Serviço: "+S.svc[0]+"\n• Data: "+lbl(S.date)+" às "+S.time+"\n• Cliente: "+S.nome+"\n• WhatsApp: "+S.tel+"\n• Pagamento: "+txtPag+"\n\nPodemos confirmar?");
+  chips([{t:"🔥 Confirmar Agendamento",ok:1},{t:"🔄 Recomeçar",ok:0}],function(it){
+    if(it.ok) saveAndFinish(); else start();
+  });
+}
+
+function saveAndFinish(){
+  var dateKey = iso(S.date);
+  var duration = S.svc ? S.svc[2] : 40;
+  var timeKey = S.time.replace(":","");
+
+  if(db){
+    try {
+      db.ref('agendamentos/' + dateKey + '/' + timeKey).set({
+        nome: S.nome, 
+        tel: S.tel, 
+        servico: S.svc[0], 
+        preco: S.svc[1], 
+        data: lbl(S.date), 
+        hora: S.time,
+        duracao: duration,
+        pagamento: S.pagamento || "LOCAL",
+        pago: S.pago || false
+      });
+    } catch(e){}
+  }
+  
+  say("Tudo pronto! Seu horário tá garantido na régua 📐");
+  
+  var statusPixMsg = (S.pagamento === "PIX") ? "PAGO (via PIX - Aguardando conferência)" : "A pagar na loja";
+  var m = "Olá! Agendei pelo site:\n\n" +
+          "Nome: " + S.nome + "\n" +
+          "Serviço: " + S.svc[0] + "\n" +
+          "Dia: " + lbl(S.date) + " às " + S.time + "\n" +
+          "Pagamento: " + statusPixMsg;
+  
+  var h = parseInt(S.time.split(":")[0]);
+  var min = parseInt(S.time.split(":")[1]);
+  var dtStart = new Date(S.date.getFullYear(), S.date.getMonth(), S.date.getDate(), h, min);
+  var dtEnd = new Date(dtStart.getTime() + S.svc[2]*60000);
+  
+  var fmt = function(d){ return d.toISOString().replace(/-|:|\.\d+/g, ""); };
+
+  var gCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+                "&text=" + encodeURIComponent(S.svc[0] + " - Barbearia Wilkei LC") +
+                "&dates=" + fmt(dtStart) + "/" + fmt(dtEnd) +
+                "&details=" + encodeURIComponent("Agendamento na Barbearia Wilkei LC") +
+                "&location=" + encodeURIComponent("Barbearia Wilkei LC");
+
+  ctl.innerHTML="";
+  
+  var aWa = document.createElement("a");
+  aWa.className = "wa"; aWa.target = "_blank";
+  aWa.href = "https://wa.me/" + SALON + "?text=" + encodeURIComponent(m);
+  aWa.innerHTML = "💬 Enviar confirmação no WhatsApp";
+  ctl.appendChild(aWa);
+
+  var btnIos = document.createElement("button");
+  btnIos.className = "cal";
+  btnIos.innerHTML = "📅 Adicionar ao iPhone (Lembretes)";
+  btnIos.onclick = function() {
+    var icsContent = 
+      "BEGIN:VCALENDAR\n" +
+      "VERSION:2.0\n" +
+      "PRODID:-//Barbearia Wilkei LC//PT\n" +
+      "BEGIN:VEVENT\n" +
+      "SUMMARY:" + S.svc[0] + " - Barbearia Wilkei LC\n" +
+      "DESCRIPTION:Seu agendamento na Barbearia Wilkei LC está confirmado.\n" +
+      "LOCATION:Barbearia Wilkei LC\n" +
+      "DTSTART:" + fmt(dtStart) + "\n" +
+      "DTEND:" + fmt(dtEnd) + "\n" +
+      "BEGIN:VALARM\n" +
+      "TRIGGER:-PT1H\n" +
+      "ACTION:DISPLAY\n" +
+      "DESCRIPTION:Lembrete de Agendamento\n" +
+      "END:VALARM\n" +
+      "END:VEVENT\n" +
+      "END:VCALENDAR";
+
+    var blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', 'agendamento.ics');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  ctl.appendChild(btnIos);
+
+  var aAndroid = document.createElement("a");
+  aAndroid.className = "cal cal-google";
+  aAndroid.target = "_blank";
+  aAndroid.href = gCalUrl;
+  aAndroid.innerHTML = "📅 Adicionar ao Google Agenda";
+  ctl.appendChild(aAndroid);
+
+  var btnCancel = document.createElement("button");
+  btnCancel.className = "del-btn";
+  btnCancel.innerHTML = "❌ Cancelar este Agendamento";
+  btnCancel.onclick = function(){ deleteBooking(dateKey, S.time.replace(":",""), true); };
+  ctl.appendChild(btnCancel);
+}
+
+function cancelByClient(){
+  say("Para cancelar, me manda o seu WhatsApp com DDD:");
+  askMulti([{key:"tel", ph:"Ex: 11999999999", type:"tel"}], function(inputs){
+    var searchTel = inputs.tel.value.replace(/\D/g,"");
+    say(searchTel, "me");
+
+    if(!db){
+      say("Não foi possível conectar à base de dados.");
+      return;
+    }
+
+    db.ref('agendamentos').once('value').then(function(snapshot){
+      var data = snapshot.val();
+      var found = [];
+      var seenBooking = {};
+
+      if(data){
+        for(var day in data){
+          for(var time in data[day]){
+            var item = data[day][time];
+            if(item && item.tel && item.tel.replace(/\D/g,"") === searchTel){
+              var key = day + "_" + item.nome + "_" + (item.hora || time);
+              if(!seenBooking[key]){
+                seenBooking[key] = true;
+                found.push({day: day, time: time, info: item});
+              }
+            }
+          }
+        }
+      }
+
+      if(found.length === 0){
+        say("Não encontrei nenhum agendamento para esse número.");
+        chips([{t:"Tentar outro número", act:"retry"}, {t:"Voltar ao início", act:"home"}], function(it){
+          if(it.act === "retry") cancelByClient();
+          else start();
+        });
+      } else {
+        say("Encontrei esses agendamentos no seu número:");
+        ctl.innerHTML = "";
+        found.forEach(function(item){
+          var btn = document.createElement("button");
+          btn.className = "del-btn";
+          btn.textContent = "Cancelar: " + item.info.data + " às " + item.info.hora + " (" + item.info.servico + ")";
+          btn.onclick = function(){ deleteBooking(item.day, item.time, true); };
+          ctl.appendChild(btn);
+        });
+      }
+    }).catch(function(err){
+      say("Erro ao procurar agendamentos. Tente novamente.");
+    });
+  });
+}
+
+function deleteBooking(dateKey, timeKey, isClient){
+  if(confirm("Tem certeza que deseja remover este item e liberar a agenda?")){
+    if(db){
+      db.ref('agendamentos/' + dateKey + '/' + timeKey).once('value').then(function(snap){
+        var item = snap.val();
+        
+        db.ref('agendamentos/' + dateKey).once('value').then(function(daySnap){
+          var dayData = daySnap.val() || {};
+          var removes = {};
+
+          if(item){
+            for(var tk in dayData){
+              var dItem = dayData[tk];
+              if(dItem && dItem.nome === item.nome && (item.nome === "🚫 DIA BLOQUEADO" || dItem.hora === item.hora)){
+                removes[tk] = null;
+              }
+            }
+          }
+          removes[timeKey] = null;
+
+          db.ref('agendamentos/' + dateKey).update(removes).then(function(){
+            alert("Removido e horário/dia liberado com sucesso!");
+            if(isClient) start(); else loadAdminPanel();
+          });
+        });
+      });
+    } else {
+      alert("Erro de conexão com o banco de dados.");
+    }
+  }
+}
+
+function togglePagoStatus(dateKey, timeKey, currentStatus){
+  if(db){
+    db.ref('agendamentos/' + dateKey + '/' + timeKey + '/pago').set(!currentStatus).then(function(){
+      loadAdminPanel();
+    });
+  }
+}
+
+function openEditModal(oldDay, oldTimeKey, itemJsonStr){
+  try {
+    var item = JSON.parse(decodeURIComponent(itemJsonStr));
+    currentEditData = { oldDay: oldDay, oldTimeKey: oldTimeKey, item: item };
+    
+    document.getElementById("edit-info").textContent = "Cliente: " + item.nome + " (" + item.servico + ")";
+    document.getElementById("edit-new-date").value = oldDay;
+    
+    var selectTime = document.getElementById("edit-new-time");
+    selectTime.innerHTML = generateAdminTimeOptions();
+    selectTime.value = item.hora || "10:00";
+
+    var selectDur = document.getElementById("edit-new-duration");
+    selectDur.value = String(item.duracao || getServiceDuration(item.servico));
+
+    document.getElementById("modal-edit").style.display = "flex";
+  } catch(e){
+    alert("Erro ao abrir edição.");
+  }
+}
+
+function closeEditModal(){
+  document.getElementById("modal-edit").style.display = "none";
+  currentEditData = null;
+}
+
+function confirmMoveBooking(){
+  if(!currentEditData) return;
+
+  var newDate = document.getElementById("edit-new-date").value;
+  var newTime = document.getElementById("edit-new-time").value;
+  var newDur = parseInt(document.getElementById("edit-new-duration").value) || 40;
+
+  if(!newDate || !newTime){
+    alert("Preencha a data e o horário.");
+    return;
+  }
+
+  var oldDay = currentEditData.oldDay;
+  var oldTimeKey = currentEditData.oldTimeKey;
+  var oldItem = currentEditData.item;
+
+  var parts = newDate.split("-");
+  var dtObj = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var newLabel = lbl(dtObj);
+  var newTimeKey = newTime.replace(":", "");
+
+  if(db){
+    db.ref('agendamentos/' + oldDay).once('value').then(function(snapshot){
+      var oldDayData = snapshot.val() || {};
+      var removes = {};
+
+      for(var tk in oldDayData){
+        if(oldDayData[tk] && oldDayData[tk].nome === oldItem.nome && oldDayData[tk].hora === oldItem.hora){
+          removes[tk] = null;
+        }
+      }
+      removes[oldTimeKey] = null;
+
+      db.ref('agendamentos/' + oldDay).update(removes).then(function(){
+        var updateData = {
+          nome: oldItem.nome, 
+          tel: oldItem.tel, 
+          servico: oldItem.servico, 
+          preco: oldItem.preco, 
+          data: newLabel, 
+          hora: newTime,
+          duracao: newDur,
+          pagamento: oldItem.pagamento || "LOCAL",
+          pago: oldItem.pago || false
+        };
+
+        db.ref('agendamentos/' + newDate + '/' + newTimeKey).set(updateData).then(function(){
+          alert("Agendamento alterado para " + newLabel + " às " + newTime + " (" + newDur + " min)!");
+          closeEditModal();
+          loadAdminPanel();
+        });
+      });
+    }).catch(function(err){
+      alert("Erro ao alterar: " + err.message);
+    });
+  }
+}
+
+function showAdminModal(){
+  document.getElementById("admin-pass-input").value = "";
+  document.getElementById("admin-err").textContent = "";
+  document.getElementById("modal-admin").style.display = "flex";
+}
+
+function closeAdminModal(){
+  document.getElementById("modal-admin").style.display = "none";
+}
+
+function checkAdminPass(){
+  var input = document.getElementById("admin-pass-input").value;
+  if(input === ADMIN_PASS){
+    closeAdminModal();
+    loadAdminPanel();
+  } else {
+    document.getElementById("admin-err").textContent = "Senha incorreta!";
+  }
+}
+
+function generateAdminTimeOptions(){
+  var opt = "";
+  for(var m=8*60+30; m<=19*60+30; m+=15){
+    var t = String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0");
+    opt += "<option value='" + t + "'>" + t + "</option>";
+  }
+  return opt;
+}
+
+function blockSlotOrDay(){
+  var dateVal = document.getElementById('block-date').value;
+  var timeVal = document.getElementById('block-time').value;
+
+  if(!dateVal){
+    alert("Selecione uma data para bloquear.");
+    return;
+  }
+
+  if(!db){
+    alert("Banco de dados indisponível.");
+    return;
+  }
+
+  var parts = dateVal.split("-");
+  var dtObj = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+  var dateLabel = lbl(dtObj);
+
+  if(timeVal === "ALL"){
+    if(confirm("Tem certeza que deseja BLOQUEAR O DIA INTEIRO (" + dateLabel + ")?")){
+      var updates = {};
+      for(var m=8*60+30; m<=19*60+30; m+=30){
+        var t = String(Math.floor(m/60)).padStart(2,"0") + ":" + String(m%60).padStart(2,"0");
+        var tk = t.replace(":", "");
+        updates[tk] = {
+          nome: "🚫 DIA BLOQUEADO",
+          tel: "-",
+          servico: "Folga / Fechado",
+          preco: 0,
+          data: dateLabel,
+          hora: t,
+          bloqueado: true,
+          duracao: 30
+        };
+      }
+      db.ref('agendamentos/' + dateVal).update(updates).then(function(){
+        alert("Dia " + dateLabel + " bloqueado com sucesso!");
+        switchAdminTab('block');
+      });
+    }
+  } else {
+    var tk = timeVal.replace(":", "");
+    db.ref('agendamentos/' + dateVal + '/' + tk).set({
+      nome: "🚫 HORÁRIO BLOQUEADO",
+      tel: "-",
+      servico: "Indisponível",
+      preco: 0,
+      data: dateLabel,
+      hora: timeVal,
+      bloqueado: true,
+      duracao: 30
+    }).then(function(){
+      alert("Horário " + timeVal + " do dia " + dateLabel + " bloqueado com sucesso!");
+      switchAdminTab('block');
+    });
+  }
+}
+
+function switchAdminTab(tab){
+  activeAdminTab = tab;
+  loadAdminPanel();
+}
+
+function loadAdminPanel(){
+  var todayIso = iso(new Date());
+
+  var html = "<div style='display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;'>" +
+               "<h3 style='margin:0;'>Painel do Barbeiro</h3>" +
+             "</div>" +
+             "<div class='admin-tabs'>" +
+               "<div class='admin-tab " + (activeAdminTab === 'list' ? 'active' : '') + "' onclick=\"switchAdminTab('list')\">📅 Agendamentos</div>" +
+               "<div class='admin-tab " + (activeAdminTab === 'block' ? 'active' : '') + "' onclick=\"switchAdminTab('block')\">🚫 Bloquear / Folga</div>" +
+             "</div>";
+
+  ctl.innerHTML = "<button class='send' onclick='start()'>Voltar ao Início</button>";
+
+  if(activeAdminTab === 'block') {
+    var blockFormHtml = "<div class='admin-card' style='border-color:var(--accent);'>" +
+                          "<div class='admin-card-head'><span style='color:var(--accent); font-weight:800;'>🔒 Novo Bloqueio de Horário ou Folga</span></div>" +
+                          "<div class='admin-card-body'>" +
+                            "<label style='font-weight:600; font-size:12px;'>Data para bloquear:</label>" +
+                            "<input type='date' id='block-date' value='" + todayIso + "' style='margin-bottom:10px;'>" +
+                            "<label style='font-weight:600; font-size:12px;'>Horário:</label>" +
+                            "<select id='block-time' style='margin-bottom:14px;'>" +
+                              "<option value='ALL'>⚠️ Bloquear O DIA INTEIRO (Folga)</option>" +
+                              generateAdminTimeOptions() +
+                            "</select>" +
+                            "<button class='send' onclick='blockSlotOrDay()'>🔒 CONFIRMAR BLOQUEIO</button>" +
+                          "</div>" +
+                        "</div>" +
+                        "<h4 style='margin: 18px 0 10px; color:var(--mute); text-transform:uppercase;'>Bloqueios e Folgas Ativos</h4>" +
+                        "<p id='block-status' style='color:var(--mute); font-size:14px;'>🔍 Buscando bloqueios...</p>";
+
+    log.innerHTML = html + blockFormHtml;
+
+    if(!db){
+      document.getElementById('block-status').outerHTML = "<p>Banco de dados offline.</p>";
+      return;
+    }
+
+    db.ref('agendamentos').once('value').then(function(snapshot){
+      var data = snapshot.val();
+      var blockStatusElem = document.getElementById('block-status');
+      if(!data){
+        blockStatusElem.outerHTML = "<p style='color:var(--mute); text-align:center; margin-top:20px;'>Nenhum bloqueio ou folga ativa no momento.</p>";
+        return;
+      }
+
+      var blocksHtml = "";
+      var seenBlocks = {};
+
+      for(var day in data){
+        for(var time in data[day]){
+          var item = data[day][time];
+          if(!item || !item.bloqueado) continue;
+
+          var isFullDay = (item.nome === "🚫 DIA BLOQUEADO");
+          var blockKey = isFullDay ? (day + "_FULL") : (day + "_" + time);
+
+          if(seenBlocks[blockKey]) continue;
+          seenBlocks[blockKey] = true;
+
+          blocksHtml += "<div class='admin-card' style='border-color:var(--danger); background:rgba(255,71,87,0.06);'>" +
+                          "<div class='admin-card-head'>" +
+                            "<span class='admin-card-time' style='color:var(--danger);'>" + (isFullDay ? "📅 " + item.data + " (Dia Inteiro)" : "⏰ " + item.data + " às " + item.hora) + "</span>" +
+                            "<span class='admin-card-badge' style='background:rgba(255,71,87,0.2); color:var(--danger);'>FECHADO</span>" +
+                          "</div>" +
+                          "<div class='admin-card-body'>" +
+                            "<b>Status:</b> " + (isFullDay ? "Folga / Dia Fechado" : "Horário Indisponível") +
+                          "</div>" +
+                          "<div class='admin-card-actions'>" +
+                            "<button class='btn-admin-act btn-act-del' onclick=\"deleteBooking('"+day+"','"+time+"',false)\">🔓 Desbloquear</button>" +
+                          "</div>" +
+                        "</div>";
+        }
+      }
+
+      blockStatusElem.outerHTML = blocksHtml || "<p style='color:var(--mute); text-align:center; margin-top:20px;'>Nenhum bloqueio ou folga ativa no momento.</p>";
+    });
+    return;
+  }
+
+  var listHtml = "<p id='admin-status' style='color:var(--mute); font-size:14px;'>🔍 Buscando agendamentos...</p>";
+  log.innerHTML = html + listHtml;
+
+  if(!db){
+    document.getElementById('admin-status').outerHTML = "<p>Banco de dados offline.</p>";
+    return;
+  }
+
+  db.ref('agendamentos').once('value').then(function(snapshot){
+    var data = snapshot.val();
+    var statusElem = document.getElementById('admin-status');
+    if(!data){
+      statusElem.outerHTML = "<p style='color:var(--mute); text-align:center; margin-top:20px;'>Nenhum agendamento ativo registrado.</p>";
+      return;
+    }
+    
+    var currentYearMonth = todayIso.substring(0,7);
+    var totalMes = 0;
+    var totalPix = 0;
+    var totalLocal = 0;
+    var qtdAtendimentos = 0;
+
+    var cardsHtml = "";
+    var seen = {};
+    var datesMap = {};
+
+    for(var day in data){
+      var isCurrentMonth = day.startsWith(currentYearMonth);
+      for(var time in data[day]){
+        var item = data[day][time];
+        if(!item || item.bloqueado) continue;
+
+        if(isCurrentMonth){
+          var val = item.preco || 0;
+          totalMes += val;
+          if(item.pago || item.pagamento === "PIX"){
+            totalPix += val;
+          } else {
+            totalLocal += val;
+          }
+          qtdAtendimentos++;
+        }
+
+        var uniqueKey = day + "_" + item.nome + "_" + item.hora;
+        if(seen[uniqueKey]) continue;
+        seen[uniqueKey] = true;
+
+        if(!datesMap[day]) datesMap[day] = [];
+        datesMap[day].push({ timeKey: time, item: item });
+      }
+    }
+
+    var summaryHtml = "<div class='admin-card' style='background:rgba(255,215,0,0.05); border-color:var(--accent);'>" +
+                        "<div style='font-size:14px; font-weight:800; color:var(--accent); margin-bottom:8px;'>📊 Resumo Financeiro do Mês (" + currentYearMonth + ")</div>" +
+                        "<div style='display:grid; grid-template-columns: 1fr 1fr; gap:10px; font-size:13px;'>" +
+                          "<div><b>Faturamento Bruto:</b><br><span style='font-size:16px; color:#fff; font-weight:800;'>R$ " + totalMes + ",00</span></div>" +
+                          "<div><b>Atendimentos:</b><br><span style='font-size:16px; color:#fff; font-weight:800;'>" + qtdAtendimentos + "</span></div>" +
+                          "<div><b>PIX / Confirmado:</b><br><span style='font-size:14px; color:var(--neon-green); font-weight:700;'>R$ " + totalPix + ",00</span></div>" +
+                          "<div><b>A Receber (Loja):</b><br><span style='font-size:14px; color:var(--accent); font-weight:700;'>R$ " + totalLocal + ",00</span></div>" +
+                        "</div>" +
+                      "</div>";
+
+    var sortedDays = Object.keys(datesMap).sort();
+
+    if(sortedDays.length === 0){
+      statusElem.outerHTML = summaryHtml + "<p style='color:var(--mute); text-align:center; margin-top:20px;'>Nenhum agendamento de cliente ativo.</p>";
+      return;
+    }
+
+    sortedDays.forEach(function(dayKey){
+      var dayItems = datesMap[dayKey];
+      var firstObj = dayItems[0].item;
+      var dateTitle = firstObj.data || dayKey;
+
+      cardsHtml += "<div class='date-group-header'>📅 " + dateTitle + "</div>";
+
+      dayItems.forEach(function(obj){
+        var item = obj.item;
+        var time = obj.timeKey;
+        var itemJson = encodeURIComponent(JSON.stringify(item));
+        var cleanTel = item.tel ? item.tel.replace(/\D/g,"") : "";
+
+        var badgeText = "";
+        var badgeBg = "";
+        if(item.pago){
+          badgeText = "🟢 PAGO";
+          badgeBg = "background:rgba(37,211,102,0.2); color:var(--neon-green);";
+        } else if(item.pagamento === "PIX"){
+          badgeText = "⏳ PIX A CONFERIR";
+          badgeBg = "background:rgba(255,215,0,0.2); color:var(--accent);";
+        } else {
+          badgeText = "🟡 PAGAR NA LOJA";
+          badgeBg = "background:rgba(142,142,159,0.2); color:var(--mute);";
+        }
+
+        var btnPagoTxt = item.pago ? "🔴 Desmarcar Pago" : "🟢 Confirmar Pago";
+
+        cardsHtml += "<div class='admin-card'>" +
+                      "<div class='admin-card-head'>" +
+                        "<span class='admin-card-time'>⏰ " + item.hora + "</span>" +
+                        "<span class='admin-card-badge' style='" + badgeBg + "'>" + badgeText + "</span>" +
+                      "</div>" +
+                      "<div class='admin-card-body'>" +
+                        "<b>Cliente:</b> " + item.nome + "<br>" +
+                        "<b>Serviço:</b> " + item.servico + " (" + (item.duracao || getServiceDuration(item.servico)) + " min) - R$ " + (item.preco || 0) + ",00<br>" +
+                        "<b>Forma:</b> " + (item.pagamento === "PIX" ? "PIX Antecipado" : "Pagar na Loja") + "<br>" +
+                        "<b>WhatsApp:</b> " + (item.tel || "-") +
+                      "</div>" +
+                      "<div class='admin-card-actions'>" +
+                        "<button class='btn-admin-act' style='background:rgba(37,211,102,0.15); color:var(--neon-green); border:1px solid var(--neon-green);' onclick=\"togglePagoStatus('"+dayKey+"','"+time+"',"+(item.pago?true:false)+")\">" + btnPagoTxt + "</button>" +
+                        (cleanTel ? "<a href='https://wa.me/55" + cleanTel + "' target='_blank' class='btn-admin-act btn-act-wa'>💬 Whats</a>" : "") +
+                        "<button class='btn-admin-act btn-act-edit' onclick=\"openEditModal('"+dayKey+"','"+time+"','"+itemJson+"')\">✏️ Editar</button>" +
+                        "<button class='btn-admin-act btn-act-del' onclick=\"deleteBooking('"+dayKey+"','"+time+"',false)\">🗑️ Cancelar</button>" +
+                      "</div>" +
+                    "</div>";
+      });
+    });
+
+    statusElem.outerHTML = summaryHtml + cardsHtml;
+  });
+}
+
+start();
+</script>
+</body>
+</html>
